@@ -10,6 +10,9 @@ AI = 1
 AI_PIECE = 'X'
 PLAYER_PIECE = 'O'
 
+#########################################################################
+#########################################################################
+
 def get_score(board):
 	'''
 	params:
@@ -24,6 +27,9 @@ def get_score(board):
 	else:
 		score = 0
 	return score
+
+#########################################################################
+#########################################################################
 
 def wins(board,player):
 	'''
@@ -47,12 +53,18 @@ def wins(board,player):
 		return True
 	else:
 		return False
+###################################################################################
+###################################################################################
+
 
 def game_over(board):
 	'''
 	function to return True if game is over, i.e. AI wins or PLAYER wins or is a draw
 	'''
 	return wins(board,AI) or wins(board, PLAYER) or len(empty_cells(board)) == 0
+
+######################################################################################
+######################################################################################
 
 def empty_cells(board):
 	'''
@@ -64,6 +76,9 @@ def empty_cells(board):
 			if cell == 0:
 				cells.append((x,y))
 	return cells
+
+#######################################################################################
+#######################################################################################
 
 def isValid(x,y):
 	'''
@@ -79,6 +94,9 @@ def isValid(x,y):
 	else:
 		return False
 
+##########################################################################################
+##########################################################################################
+
 def put_piece(x,y,player):
 	'''
 	params:
@@ -93,6 +111,9 @@ def put_piece(x,y,player):
 		return True
 	else:
 		return False
+
+############################################################################################
+############################################################################################
 
 def minimax(board,depth,player):
 	'''
@@ -132,6 +153,9 @@ def minimax(board,depth,player):
 
 	return best
 
+######################################################################################
+######################################################################################
+
 def draw_board(board):
 	'''
 	params:
@@ -158,6 +182,9 @@ def draw_board(board):
 		if (x+1)%3 != 0: 
 			print('----------')
 
+###########################################################################################
+###########################################################################################
+
 def play(board):
 	'''
 	the main function which starts the game and displays the winner and all
@@ -170,16 +197,10 @@ def play(board):
 	while len(empty_cells(board))>0 and not game_over(board):
 		
 		if turn %2 == 0:
-			choice = int(input('enter your choice: '))
-			board[choices[choice][0]][choices[choice][1]] = PLAYER
-			draw_board(board)
-			print()
+			player_turn(board)
 			turn += 1
 		else:
-			choicex,choicey,_ = minimax(board,len(empty_cells(board)),AI)
-			board[choicex][choicey] = AI
-			draw_board(board)
-			print()
+			ai_turn(board)
 			turn += 1
 	if wins(board,AI): 						#if AI wins
 		print()
@@ -191,5 +212,43 @@ def play(board):
 		print()
 		print('Draw!!!')
 
-play(board)
+##################################################################################################
+##################################################################################################
 
+def player_turn(board):
+	'''
+	takes in valid choice from the player and places it onto board
+	'''
+	choices = {1:(0,0), 2:(0,1), 3:(0,2),
+				4:(1,0), 5:(1,1), 6:(1,2),
+				7:(2,0), 8:(2,1), 9:(2,2)}			#mapping of the choice to positions of board
+
+	choice = int(input('\nenter your choice (1-9): '))
+	if choice in choices: 									# if position is a valid position between (1-9)
+		if choices[choice] in empty_cells(board):			# if position is empty
+			board[choices[choice][0]][choices[choice][1]] = PLAYER
+		else:												# if position is already taken
+			print('\nThe cell is already taken..... Please enter another valid position')
+			human_turn(board)
+	else:													# if invalid position, i.e. not between (1-9)
+		print('\nThe entered choice is not valid..... Please enter a valid number between (1-9)')
+		human_turn(board)
+	draw_board(board)
+	print()
+
+###################################################################################################
+###################################################################################################
+
+def ai_turn(board):
+	'''
+	makes the choice for the AI
+	'''
+	choicex,choicey,_ = minimax(board,len(empty_cells(board)),AI)
+	board[choicex][choicey] = AI
+	draw_board(board)
+	print()
+
+######################################################################################################
+######################################################################################################
+
+play(board)
