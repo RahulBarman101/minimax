@@ -189,13 +189,10 @@ def play(board):
 	'''
 	the main function which starts the game and displays the winner and all
 	'''
-	done = False
 	draw_board(board)
 	print()
 	turn = choice([1,2])     # random assignment of the player (AI or HUMAN)
-	choices = {1:[0,0],2:[0,1],3:[0,2],4:[1,0],5:[1,1],6:[1,2],7:[2,0],8:[2,1],9:[2,2]}
-	while len(empty_cells(board))>0 and not game_over(board):
-		
+	while len(empty_cells(board))>0 and not game_over(board):	
 		if turn %2 == 0:
 			player_turn(board)
 			turn += 1
